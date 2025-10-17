@@ -1,5 +1,6 @@
 mlruns/
 02-dados/mlruns/
+02-dados/mlartifacts/
 02-dados/*.zip
 02-dados/*.csv
 
