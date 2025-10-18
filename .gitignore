@@ -4,3 +4,4 @@ mlruns/
 02-dados/*.zip
 02-dados/*.csv
 
+.DS_Store
