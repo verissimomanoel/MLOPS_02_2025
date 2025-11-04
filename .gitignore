@@ -3,5 +3,6 @@ mlruns/
 02-dados/mlartifacts/
 02-dados/*.zip
 02-dados/*.csv
-
+04-deploy/.venv/
+04-deploy/*.pkl
 .DS_Store
