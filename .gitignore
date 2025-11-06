@@ -6,3 +6,4 @@ mlruns/
 04-deploy/.venv/
 04-deploy/*.pkl
 .DS_Store
+__pycache__/

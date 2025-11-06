@@ -1,0 +1,46 @@
+# Version control
+.git
+.gitignore
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.pyd
+.Python
+*.py[cod]
+*$py.class
+.pytest_cache
+.coverage
+htmlcov/
+.tox/
+.nox/
+.coverage.*
+*.cover
+*.log
+
+# Virtual Environment
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Project specific
+*.pkl
+*.joblib
+models/
+!models/README.md
+test_data/
+notebooks/
+docs/
