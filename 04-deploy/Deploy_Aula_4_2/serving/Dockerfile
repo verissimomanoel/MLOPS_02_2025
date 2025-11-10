@@ -17,7 +17,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy project files
-COPY pyproject.toml ./
 COPY README.md ./
 COPY app ./app
 COPY model_cache ./
