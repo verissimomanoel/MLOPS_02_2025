@@ -5,5 +5,9 @@ mlruns/
 02-dados/*.csv
 04-deploy/.venv/
 04-deploy/*.pkl
+04-deploy/mlruns/
+04-deploy/Deploy_Aula_4_2/model_fit/mlartifacts/
+04-deploy/Deploy_Aula_4_2/model_fit/*.joblib
 .DS_Store
 __pycache__/
+.venv/

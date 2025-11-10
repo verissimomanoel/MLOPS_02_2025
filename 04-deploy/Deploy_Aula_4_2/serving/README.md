@@ -60,11 +60,14 @@ pip install -e ".[all]"
 # Construa a imagem
 docker build -t ml-serving .
 
+# Pra rodar o MLFlow (caso necessário)
+mlflow server --host 0.0.0.0 --port 8080
+
 # Execute o container
 docker run -d \
   -p 8000:8000 \
-  -e MODEL_NAME=RandomForestClassifier \
-  -e MODEL_VERSION_ALIAS=the_latest \
+  -e MODEL_NAME=random-forest \
+  -e MODEL_VERSION_ALIAS=latest \
   --name ml-serving \
   ml-serving
 ```
@@ -195,8 +198,7 @@ O `ModelManager` é responsável por:
 
 ### Docker
 
-- Build multi-stage para imagens otimizadas
-- Volumes para modelos
+- Build multi-stage para imagens otimizada
 - Healthcheck integrado
 - Configuração via variáveis de ambiente
 

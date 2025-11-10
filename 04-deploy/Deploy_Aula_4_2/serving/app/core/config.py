@@ -8,6 +8,7 @@ class Settings(BaseSettings):
     PROJECT_NAME: str = "ML Model Serving API"
     MODEL_NAME: Optional[str] = None
     MODEL_VERSION_ALIAS: Optional[str] = None
+    MLFLOW_TRACKING_URI: str = "http://host.docker.internal:8080"
 
     class Config:
         case_sensitive = True

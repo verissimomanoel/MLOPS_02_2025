@@ -1,28 +1,18 @@
 import logging
-import os
 from pathlib import Path
 from typing import Any, Dict
 
+import joblib
 import mlflow
 import mlflow.sklearn
 import numpy as np
-import joblib
-from mlflow import MlflowClient
-from sklearn.preprocessing import OneHotEncoder
+from app.core.config import settings
 
 logger = logging.getLogger("ml_serving")
 
-BASE_DIR = Path(__file__).parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 MODEL_CACHE_DIR = BASE_DIR / "model_cache"
-
 MODEL_CACHE_DIR.mkdir(exist_ok=True, parents=True)
-
-MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://localhost:8080")
-MLFLOW_REGISTRY_URI = os.getenv("MLFLOW_REGISTRY_URI", "http://localhost:8080")
-
-mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
-mlflow.set_registry_uri(MLFLOW_REGISTRY_URI)
-client = MlflowClient()
 
 
 class ModelLoadError(Exception):
@@ -37,6 +27,11 @@ class ModelManager:
         self._encoder = None
         self._model_info = None
         self._loading = False
+
+        print("MLFLOW_TRACKING_URI: ", settings.MLFLOW_TRACKING_URI)
+
+        mlflow.set_tracking_uri(settings.MLFLOW_TRACKING_URI)
+        mlflow.set_registry_uri(settings.MLFLOW_TRACKING_URI)
 
     @property
     def model_info(self):
@@ -73,7 +68,6 @@ class ModelManager:
                 logger.info(f"Found model in local cache at: {model_cache_path}")
                 try:
                     self._model = mlflow.sklearn.load_model(str(model_cache_path))
-                    self._encoder = joblib.load(MODEL_CACHE_DIR / "encoder" / "encoder.joblib")
                     logger.info("Successfully loaded model from local cache")
                 except Exception as cache_error:
                     logger.warning(
@@ -84,7 +78,9 @@ class ModelManager:
                         model_uri, dst_path=str(model_cache_path)
                     )
             else:
-                logger.info("Model not found in cache. Downloading from MLflow...")
+                logger.info(
+                    f"Model not found in cache. Downloading from MLflow... Path: {model_cache_path}"
+                )
                 model_cache_path.mkdir(exist_ok=True, parents=True)
                 self._model = mlflow.sklearn.load_model(
                     model_uri, dst_path=str(model_cache_path)
@@ -114,6 +110,7 @@ class ModelManager:
             )
             raise ModelLoadError(f"Unexpected error: {str(e)}")
         finally:
+            self._encoder = joblib.load(BASE_DIR / "encoder.joblib")
             self._loading = False
 
     def predict(self, data: Dict[str, Any]) -> Dict[str, Any]:
@@ -140,6 +137,7 @@ class ModelManager:
         """Preprocess the input data before making predictions."""
         try:
             import pandas as pd
+
             df = pd.DataFrame([data])
             features = self._encoder.transform(df)
             return features

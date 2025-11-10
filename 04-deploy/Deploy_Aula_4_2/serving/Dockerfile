@@ -20,6 +20,8 @@ RUN apt-get update \
 COPY pyproject.toml ./
 COPY README.md ./
 COPY app ./app
+COPY model_cache ./
+COPY encoder ./
 COPY main.py ./
 
 # Create and activate virtual environment
@@ -46,6 +48,8 @@ COPY --from=builder /app /app
 ENV MODEL_PATH="" \
     PORT=8000 \
     HOST="0.0.0.0"
+
+# ENV MLFLOW_TRACKING_URI=http://host.docker.internal:8080
 
 # Expose port
 EXPOSE 8000
